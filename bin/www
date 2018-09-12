@@ -16,7 +16,6 @@ var fs = require('fs');
 
 var port = normalizePort(process.env.PORT || '8080');
 app.set('port', port);
-app.set('secPort', port+443);
 
 /**
  * Create HTTP server.
