@@ -32,7 +32,7 @@ fetchRouter.route('/')
         pageSize: 50
       }).then(response => {
         response.articles.map((el) =>{
-            const newDate = moment(el.body.publishedAt, "YYYY-MM-DDTHH:mm:ss.SSSSZ").format("YYYY-MM-DD, HH:mm:ss");
+            const newDate = moment(el.publishedAt, "YYYY-MM-DDTHH:mm:ss.SSSSZ").format("YYYY-MM-DD, HH:mm:ss");
             el.publishedAt = newDate;
             return el
         })
