@@ -14,7 +14,7 @@ var fs = require('fs');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '8080');
 app.set('port', port);
 app.set('secPort', port+443);
 
@@ -37,15 +37,6 @@ var options = {
   key: fs.readFileSync(__dirname + '/private.key'),
   cert: fs.readFileSync(__dirname + '/certificate.pem')
 };
-
-var secureServer = https.createServer(options, app);
-
-secureServer.listen(app.get('secPort'), () =>{
-  console.log('Secure Server listeneing on port ', app.get('secPort'));
-});
-
-secureServer.on('error', onError);
-secureServer.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
