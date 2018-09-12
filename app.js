@@ -34,14 +34,6 @@ connect.then((db) => {
 
 var app = express();
 
-app.all('*', (req, res, next) =>{
-  if (req.secure){
-    return next();
-  }else{
-    res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
-  }
-});
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade', 'hbs');
@@ -55,7 +47,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
