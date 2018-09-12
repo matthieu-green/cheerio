@@ -31,6 +31,11 @@ fetchRouter.route('/')
         sources: "bbc-news, le-monde, techradar, wired, the-wall-street-journal, the-economist, hacker-news, lequipe",
         pageSize: 50
       }).then(response => {
+        response.map((el) =>{
+            const newDate = moment(el.articles.publishedAt, "YYYY-MM-DDTHH:mm:ss.SSSSZ").format("YYYY-MM-DD, HH:mm:ss");
+            el.publishedAt = newDate;
+            return el
+        })
         return res.status(200).json(response.articles)
       })
   .catch((err) => {
