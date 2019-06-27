@@ -26,6 +26,8 @@ saveRouter.route('/')
         $('article.t_localisations_geographiques-senegal').each(function(i, element){
           var a = $(this)
 
+          var url = a.children().eq(0).attr('href')
+
           var header = a.children('header.entry-header')
           var title = header.children('h1.entry-title').text().replace(/(\r\n|\n|\r|\t)/gm, "")
           var financement = header.children('div.entry-meta').children().eq(0).text();
@@ -38,7 +40,8 @@ saveRouter.route('/')
             title: title,
             theme: theme,
             financement: financement,
-            validite: validite
+            validite: validite,
+            url: url
           }
           table.push(metadata)
         })
