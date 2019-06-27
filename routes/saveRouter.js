@@ -22,16 +22,16 @@ saveRouter.route('/')
 
     request('https://www.coordinationsud.org/financements/?type=&theme=&localisation=senegal&duree=', function (error, response, html) {
       if (!error && response.statusCode == 200) {
-        var $ = cheerio.load(html);
+        var $ = cheerio.load(html)
         $('article.t_localisations_geographiques-senegal').each(function(i, element){
-          var a = $(this);
+          var a = $(this)
 
           var header = a.children('header.entry-header')
           var title = header.children('h1.entry-title').text().replace(/(\r\n|\n|\r|\t)/gm, "")
           var financement = header.children('div.entry-meta').children().eq(0).text();
-          var validite = header.children('div.entry-meta').children().eq(1).text().replace("Fin de validité : ", "");
+          var validite = header.children('div.entry-meta').children().eq(1).text().replace("Fin de validité : ", "")
 
-          var summary = a.children('div.entry-summary');
+          var summary = a.children('div.entry-summary')
           var theme = summary.children('p').text().replace("Thèmes : ", "")
 
           var metadata = {
@@ -39,11 +39,11 @@ saveRouter.route('/')
             theme: theme,
             financement: financement,
             validite: validite
-          };
+          }
           return res.status(200).json(metadata)
-        });
+        })
       }
-    });
+    })
   .catch((err) => {
     console.error(err)
   })
