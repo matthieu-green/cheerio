@@ -11,8 +11,6 @@ var passport = require('passport');
 var authenticate = require('./authenticate');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
 var fetchRouter = require('./routes/fetchRouter');
 var config = require('./config');
 
