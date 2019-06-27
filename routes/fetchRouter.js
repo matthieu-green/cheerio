@@ -5,7 +5,6 @@ const table = require('cli-table');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const authenticate = require('../authenticate')
 
 const NewsAPI = require('newsapi');
 const newsapi = new NewsAPI('035a7eca524945ffb93c8588bfdafe49');

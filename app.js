@@ -13,17 +13,12 @@ var authenticate = require('./authenticate');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var productRouter = require('./routes/productRouter');
-var contactRouter = require('./routes/contactRouter');
-var uploadRouter = require('./routes/uploadRouter');
 var fetchRouter = require('./routes/fetchRouter');
 var config = require('./config');
-var authorRouter = require('./routes/authorRouter');
 
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
-const User =  require('./models/user');
 
 const url = config.mongoUrl;
 
@@ -67,12 +62,8 @@ app.use(function (req, res, next) {
 app.use(passport.initialize());
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/products', productRouter);
-app.use('/contacts', contactRouter);
-app.use('/imageUpload', uploadRouter);
-app.use('/authors', authorRouter);
 app.use('/fetch', fetchRouter);
+app.use('/save', saveRouter);
 
 
 app.use(express.static(path.join(__dirname, 'public')));
