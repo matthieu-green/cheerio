@@ -44,9 +44,6 @@ saveRouter.route('/')
         })
       }
     })
-  .catch((err) => {
-    console.error(err)
-  })
 })
 
 module.exports = saveRouter;
