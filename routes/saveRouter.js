@@ -19,7 +19,7 @@ saveRouter.route('/')
 saveRouter.route('/')
 .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200);})
 .get(cors.cors, (req, res, next) =>{
-
+    var table = []
     request('https://www.coordinationsud.org/financements/?type=&theme=&localisation=senegal&duree=', function (error, response, html) {
       if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html)
@@ -40,10 +40,11 @@ saveRouter.route('/')
             financement: financement,
             validite: validite
           }
-          return res.status(200).json(metadata)
+          this.table.push(metadata)
         })
       }
     })
+    return res.status(200).json(this.table)
 })
 
 module.exports = saveRouter;
