@@ -40,11 +40,11 @@ saveRouter.route('/')
             financement: financement,
             validite: validite
           }
-          this.table.push(metadata)
+          table.push(metadata)
         })
       }
+      return res.status(200).json(this.table)
     })
-    return res.status(200).json(this.table)
 })
 
 module.exports = saveRouter;
