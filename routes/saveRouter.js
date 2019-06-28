@@ -49,6 +49,7 @@ saveRouter.route('/')
           }
           table.push(metadata)
         })
+        return res.status(200).json(table)
       }
     })
 
@@ -108,7 +109,6 @@ saveRouter.route('/')
             table.push(metadata);
           }
         });
-        return res.status(200).json(table)
       }
     });
 
