@@ -20,6 +20,9 @@ saveRouter.route('/')
 .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200);})
 .get(cors.cors, (req, res, next) =>{
     var table = []
+
+
+    //request for Coordination Sud
     request('https://www.coordinationsud.org/financements/?type=&theme=&localisation=senegal&duree=', function (error, response, html) {
       if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html)
@@ -47,8 +50,38 @@ saveRouter.route('/')
           table.push(metadata)
         })
       }
-      return res.status(200).json(table)
     })
+
+
+    //request for luxdev
+    request('https://senegal.luxdev.lu/fr/tenders', function (error, response, html) {
+      if (!error && response.statusCode == 200) {
+        var $ = cheerio.load(html)
+        $('tr.tender:not(.light)[data-country=SEN]').each(function(i, element){
+          var a = $(this)
+
+          var title = a.children('td').children('a').text()
+          var url = a.children('td').children('a').attr('href')
+          var validite = a.children('td').eq(2).text()
+
+          var metadata = {
+            title: title,
+            url: url,
+            validite: validite,
+            theme: "Non Défini",
+            financement: "",
+            source: "luxdev"
+          }
+
+          table.push(metadata)
+        })
+
+      }
+    })
+
+    return res.status(200).json(table)
+
+
 })
 
 module.exports = saveRouter;
