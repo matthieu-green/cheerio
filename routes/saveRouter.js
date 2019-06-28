@@ -110,6 +110,7 @@ saveRouter.route('/')
 
             table.push(metadata);
           }
+          return res.status(200).json(table)
         });
       }
     });
@@ -118,7 +119,7 @@ saveRouter.route('/')
     //request for USAID
     async function asyncCall() {
 
-      let feed = await parser.parseURL('https://www.grants.gov/rss/GG_NewOppByCategory.xml');
+      let feed = await parser.parseURL('https://www.grants.gov/rss/GG_OppModByCategory.xml');
       feed.items.forEach(item => {
         if(item['content:encoded'].toLowerCase().includes("senegal")){
           var title = item.title
