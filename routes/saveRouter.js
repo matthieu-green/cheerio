@@ -1,5 +1,8 @@
 var request = require('request');
 var cheerio = require('cheerio');
+let Parser = require('rss-parser');
+let parser = new Parser();
+
 
 const express = require('express');
 const bodyParser = require('body-parser');
