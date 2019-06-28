@@ -49,7 +49,6 @@ saveRouter.route('/')
           }
           table.push(metadata)
         })
-        return res.status(200).json(table)
       }
     })
 
@@ -78,6 +77,41 @@ saveRouter.route('/')
         })
       }
     })
+
+
+    //request for AECID
+    request('http://www.aecid.es/ES/la-aecid/anuncios/subvenciones', function (error, response, html) {
+      if (!error && response.statusCode == 200) {
+        var $ = cheerio.load(html);
+        $('.listadoanuncios > li').each(function(i, element){
+
+          var a = $(this);
+
+          var title = a.children('p.tituloAnuncios').text()
+
+          var validite = a.children('p.fechaPublicacionAnuncios').text().replace("Fecha de publicación: ", "Date de Publication: ")
+
+          var verif = parseInt(validite.charAt(30))
+
+          var url = a.children('a.vertodas').attr('href')
+
+          if(verif > 8 ){
+            var metadata = {
+              title: title,
+              url: url,
+              validite: validite,
+              theme: "Non Défini",
+              financement: "AECID",
+              source: "aecid"
+            }
+
+            table.push(metadata);
+          }
+        });
+        return res.status(200).json(table)
+      }
+    });
+
 
 
 
