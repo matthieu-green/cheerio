@@ -34,7 +34,7 @@ saveRouter.route('/')
           var header = a.children('header.entry-header')
           var title = header.children('h1.entry-title').text().replace(/(\r\n|\n|\r|\t)/gm, "")
           var financement = header.children('div.entry-meta').children().eq(0).text();
-          var validite = header.children('div.entry-meta').children().eq(1).text().replace("Fin de validité : ", "")
+          var validite = header.children('div.entry-meta').children().eq(1).text()
 
           var summary = a.children('div.entry-summary')
           var theme = summary.children('p').text().replace("Thèmes : ", "")
@@ -68,7 +68,7 @@ saveRouter.route('/')
           var metadata = {
             title: title,
             url: url,
-            validite: validite,
+            validite: "Fin de Validité: " + validite,
             theme: "Non Défini",
             financement: "",
             source: "luxdev"
