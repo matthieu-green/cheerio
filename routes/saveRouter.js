@@ -49,7 +49,6 @@ saveRouter.route('/')
           }
           table.push(metadata)
         })
-        return res.status(200).json(table)
       }
     })
 
@@ -111,6 +110,32 @@ saveRouter.route('/')
         });
       }
     });
+
+
+    //request for USAID
+    async function asyncCall() {
+
+      let feed = await parser.parseURL('https://www.grants.gov/rss/GG_NewOppByCategory.xml');
+      feed.items.forEach(item => {
+        if(item['content:encoded'].toLowerCase().includes("senegal")){
+          var title = item.title
+          var url = item.link
+          var validite = "Date de publication" + item.pubDate
+          var metadata = {
+            title: title,
+            url: url,
+            validite: validite,
+            theme: "Non Défini",
+            financement: "US GRANTS",
+            source: "usaid"
+          }
+          table.push(metadata);
+        }
+      });
+      return res.status(200).json(table)
+    };
+
+    asyncCall()
 
 
 
