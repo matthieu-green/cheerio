@@ -72,7 +72,7 @@ saveRouter.route('/')
             url: url,
             validite: "Fin de Validité: " + validite,
             theme: "Non Défini",
-            financement: "",
+            financement: "Multiple Sources",
             source: "luxdev"
           }
 
@@ -192,7 +192,7 @@ saveRouter.route('/')
               url: url,
               validite: validite,
               theme: theme,
-              financement: "",
+              financement: "Multiple Sources",
               source: "fundsforngos"
             }
 
@@ -218,7 +218,7 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: "https://sn.usembassy.gov/education-culture/funding-opportunities/",
-              validite: "Regarder le site",
+              validite: "Chercher dans le Info Box",
               theme: "Non Défini",
               financement: "US EMBASSY",
               source: "usembassy",
@@ -229,6 +229,45 @@ saveRouter.route('/')
         });
       }
     });
+
+
+    request({method: "GET",
+            "rejectUnauthorized": false,
+            "url": 'https://www.idrc.ca/en/funding'}, function (error, response, html) {
+      if (!error && response.statusCode == 200) {
+        var $ = cheerio.load(html);
+        $('.view-display-id-block > .search-results-list-item').each(function(i, element){
+
+          var a = $(this);
+
+          var title = a.children('.views-field-title').children('.field-content').text()
+
+          var url = a.children('.views-field-title').children('.field-content').children('a').attr('href')
+
+          var type = a.children().eq(1).text()
+
+          var validite = a.children().eq(2).children('span').text()
+
+
+          if(type.toLowerCase().includes("proposals")){
+            var metadata = {
+              title: title,
+              url: "https://www.idrc.ca/en/funding" + url,
+              validite: validite,
+              theme: "Non Défini",
+              financement: "International Development Research Center",
+              source: "idrc",
+            }
+
+            table.push(metadata)
+          }
+        });
+
+      }else{
+        console.log(error)
+      }
+    });
+
 
 
 
