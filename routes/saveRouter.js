@@ -141,6 +141,69 @@ saveRouter.route('/')
 
     asyncCall()
 
+    request('https://www2.fundsforngos.org/tag/senegal/', function (error, response, html) {
+      if (!error && response.statusCode == 200) {
+        var $ = cheerio.load(html);
+        $('.post.tag-senegal.tag-call-for-proposals-and-call-for-applications').each(function(i, element){
+
+          var a = $(this);
+
+          var link = a.children('h2.entry-title').children('a.entry-title-link')
+          var title = link.text()
+          var url = link.attr('href')
+
+          var word = a.children('div.entry-content').children('p').text()
+          var words = word.split(/\s+/)
+          var validite = words[1] + " " + words[2] + " " + words[3]
+          var description = word.split("\n")
+          var theme = description[1]
+          for(i = 2; i<description.length; i++){
+            theme = theme + " " + description[i]
+          }
+
+
+
+          // let current_datetime = new Date()
+          // let date = current_datetime.getDate() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getFullYear()
+          // var dateArray = date.split("-");
+
+          // var current_date = dateArray[0]+ " " + dateArray[1]+ " " + dateArray[2]
+
+          // var months = [" ", "January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+          //
+          // var month = months.indexOf(words[2])
+
+
+
+          // if(parseInt(dateArray[2]) < parseInt(words[3])){
+          //   console.log(test)
+          // }else if(parseInt(dateArray[2]) == parseInt(words[3])){
+          //   if(parseInt(dateArray[1]) < parseInt(month)){
+          //     console.log(test)
+          //   }else if(parseInt(dateArray[1]) == parseInt(month)){
+          //     if (parseInt(dateArray[0]) <= parseInt(words[1])){
+          //       console.log(test)
+          //     }
+          //   }
+          // }
+
+            var metadata = {
+              title: title,
+              url: url,
+              validite: validite,
+              theme: theme,
+              financement: "",
+              source: "fundsforngos"
+            }
+
+            table.push(metadata);
+          // }
+
+        });
+      }
+    });
+
+
 
 
 
