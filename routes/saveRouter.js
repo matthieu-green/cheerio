@@ -203,6 +203,33 @@ saveRouter.route('/')
       }
     });
 
+    request('https://sn.usembassy.gov/education-culture/funding-opportunities/', function (error, response, html) {
+      if (!error && response.statusCode == 200) {
+        var $ = cheerio.load(html);
+        $('.panel').each(function(i, element){
+
+          var a = $(this);
+
+          var title = a.children('.accordion-toggle').children('.panel-heading').children('.panel-title').text()
+
+          var title2 = a.children('.panel-collapse').children('.panel-body').children('.accdiv').text()
+
+          if(title.toLowerCase().includes("grant")){
+            var metadata = {
+              title: title,
+              url: "https://sn.usembassy.gov/education-culture/funding-opportunities/",
+              validite: "Regarder le site",
+              theme: "Non Défini",
+              financement: "US EMBASSY",
+              source: "usembassy",
+              info: "title2"
+            }
+            table.push(metadata);
+          }
+        });
+      }
+    });
+
 
 
 
