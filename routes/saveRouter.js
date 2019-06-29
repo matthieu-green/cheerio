@@ -222,7 +222,7 @@ saveRouter.route('/')
               theme: "Non Défini",
               financement: "US EMBASSY",
               source: "usembassy",
-              info: "title2"
+              info: title2
             }
             table.push(metadata);
           }
