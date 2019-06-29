@@ -102,7 +102,7 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: url,
-              validite: validite,
+              validite: "Fin de validité" + validite,
               theme: "Non Défini",
               financement: "AECID",
               source: "aecid"
@@ -124,11 +124,11 @@ saveRouter.route('/')
         if(item['content:encoded'].toLowerCase().includes("senegal")){
           var title = item.title
           var url = item.link
-          var validite = "Date de publication" + item.pubDate
+          var validite = "Date de publication: " + item.pubDate
           var metadata = {
             title: title,
             url: url,
-            validite: validite,
+            validite: "Fin de validité" + validite,
             theme: "Non Défini",
             financement: "US GRANTS",
             source: "usaid"
@@ -190,7 +190,7 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: url,
-              validite: validite,
+              validite: "Fin de validité" + validite,
               theme: theme,
               financement: "Multiple Sources",
               source: "fundsforngos"
@@ -253,7 +253,7 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: "https://www.idrc.ca/en/funding" + url,
-              validite: validite,
+              validite: "Fin de validité" + validite,
               theme: "Non Défini",
               financement: "International Development Research Center",
               source: "idrc",
