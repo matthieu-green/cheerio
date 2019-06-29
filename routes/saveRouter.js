@@ -102,7 +102,7 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: url,
-              validite: "Fin de validité" + validite,
+              validite: validite,
               theme: "Non Défini",
               financement: "AECID",
               source: "aecid"
@@ -110,7 +110,6 @@ saveRouter.route('/')
 
             table.push(metadata);
           }
-          return res.status(200).json(table)
         });
       }
     });
