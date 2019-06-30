@@ -150,6 +150,8 @@ saveRouter.route('/')
             }
           }
 
+          var infoBox = info.join("<br>")
+
           function insertData(){
             var metadata = {
               title: title,
@@ -158,7 +160,7 @@ saveRouter.route('/')
               theme: info[18],
               financement: "US GRANTS",
               source: "usaid",
-              info: info.join("\n")
+              info: infoBox
             }
             table.push(metadata);
           }
