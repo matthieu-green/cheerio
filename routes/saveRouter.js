@@ -364,11 +364,11 @@ saveRouter.route('/')
                   var metadata = {
                     title: title,
                     url: reqUrl,
-                    validite: validite,
+                    validite: "Fin de validité: " + validite,
                     theme: theme,
                     financement: "International Development Research Center",
                     source: "idrc",
-                    info: info.split("\n\n       ").join("============================")
+                    info: info.split("\n\n       ").join("================================================")
                   }
                   table.push(metadata)
                 });
