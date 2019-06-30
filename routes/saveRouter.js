@@ -123,7 +123,7 @@ saveRouter.route('/')
         if(item['content:encoded'].toLowerCase().includes("senegal")){
           var title = item.title
           var url = item.link
-          var info = item['content:encoded'].split("</td></tr><tr><td>").join(";").split("</td></tr><tr><td valign=\'top\'>").join(";").split("</td><td>").join(" ").split(";").slice(2)
+          var info = item['content:encoded'].split("</td></tr><tr><td>").join("|").split("</td></tr><tr><td valign=\'top\'>").join("|").split("</td><td>").join(" ").split("|").slice(2)
 
           var closeDateString = info[12].split(" ").slice(2).join(" ").split(",").join("")
           var closeDateArray = closeDateString.split(" ")
