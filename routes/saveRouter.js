@@ -138,6 +138,8 @@ saveRouter.route('/')
 
           var month = months.indexOf(closeDateArray[0])
 
+          var infoBox = info.join("<br><br>")
+
           if(parseInt(dateArray[2]) < parseInt(closeDateArray[2])){
             insertData()
           }else if(parseInt(dateArray[2]) == parseInt(closeDateArray[2])){
@@ -158,7 +160,7 @@ saveRouter.route('/')
               theme: info[18],
               financement: "US GRANTS",
               source: "usaid",
-              info: info
+              info: infoBox
             }
             table.push(metadata);
           }
