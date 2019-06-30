@@ -342,7 +342,7 @@ saveRouter.route('/')
     });
 
 
-
+    //IDRC
     request({method: "GET",
             "rejectUnauthorized": false,
             "url": 'https://www.idrc.ca/en/funding'}, function (error, response, html) {
@@ -391,6 +391,51 @@ saveRouter.route('/')
         console.log(error)
       }
     });
+
+
+    //enabel
+    async function asyncCall1() {
+
+      let feed = await parser.parseURL('https://www.enabel.be/all-tenders-rss');
+      feed.items.forEach(item => {
+
+        var title = item.title
+        var url = item.link
+
+
+        if(item.content.toLowerCase().includes("senegal")){
+
+          request(url, function (error, response, html) {
+            if (!error && response.statusCode == 200) {
+              var $ = cheerio.load(html);
+              $('.file').each(function(i, element){
+
+                var a = $(this)
+
+                var theme = "https://www.enabel.be" + a.children('a').attr('href')
+
+                var metadata = {
+                  title: title,
+                  url: url,
+                  validite: "Non défini",
+                  theme: theme,
+                  financement: "ENABEL",
+                  source: "enabel",
+                }
+
+                table.push(metadata);
+              });
+            }else{
+              console.log("error")
+            }
+          });
+        }
+
+      });
+    };
+
+    asyncCall1()
+
 
 
 
