@@ -154,11 +154,11 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: url,
-              validite: closeDateString,
+              validite: "Fin de Validité: "closeDateString,
               theme: info[18],
               financement: "US GRANTS",
               source: "usaid",
-              info: info
+              info: info.join("\n")
             }
             table.push(metadata);
           }
@@ -220,7 +220,7 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: url,
-              validite: "Fin de validité" + validite,
+              validite: "Fin de validité: " + validite,
               theme: theme,
               financement: "Multiple Sources",
               source: "fundsforngos"
@@ -284,7 +284,7 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: "https://www.idrc.ca/en/funding" + url,
-              validite: "Fin de validité" + validite,
+              validite: "Fin de validité: " + validite,
               theme: "Non Défini",
               financement: "International Development Research Center",
               source: "idrc",
