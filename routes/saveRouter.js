@@ -138,7 +138,7 @@ saveRouter.route('/')
 
           var month = months.indexOf(closeDateArray[0])
 
-          var infoBox = info.join("<br><br>")
+          var infoBox = info.join("=======================")
 
           if(parseInt(dateArray[2]) < parseInt(closeDateArray[2])){
             insertData()
