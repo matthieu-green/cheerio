@@ -247,21 +247,83 @@ saveRouter.route('/')
 
           var title2 = a.children('.panel-collapse').children('.panel-body').children('.accdiv').text()
 
-          if(title.toLowerCase().includes("grant")){
+          var array = title2.split(" ").join(";").split("\n").join(";").split(";")
+
+          var infoArray = title2.split("\n")
+
+          //check date
+          var index = array.indexOf("Closing")
+          var index1 = array.indexOf("Deadline")
+          var dateVerif = false
+          var dateClose = "Non Défini";
+
+          if (index != -1){
+            var date = array[index+2] + " " + array[index+3] + " " + array[index + 4]
+            checkDate(date)
+          }else if(index1 != -1){
+            if(!isNaN(parseInt(array[index1 + 7]))){
+              var date = array[index1+5] + " " + array[index1+6] + " " + array[index1 + 7]
+              checkDate(date)
+            }else{
+              dateClose = "Info dans Info Box"
+              dateVerif = true
+            }
+          }
+
+          function checkDate(date){
+            var dateClosing = date.split(",").join("").split(" ")
+            dateClose = date.split(",").join("")
+            let current_datetime = new Date()
+            let date1 = current_datetime.getDate() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getFullYear()
+            var dateArray = date1.split("-");
+            var current_date = dateArray[0]+ " " + dateArray[1]+ " " + dateArray[2]
+            var months = [" ", "January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+            var month = months.indexOf(dateClosing[0])
+
+            if(parseInt(dateArray[2]) < parseInt(dateClosing[2])){
+              dateVerif = true
+            }else if(parseInt(dateArray[2]) == parseInt(dateClosing[2])){
+              if(parseInt(dateArray[1]) < parseInt(month)){
+                dateVerif = true
+              }else if(parseInt(dateArray[1]) == parseInt(month)){
+                if (parseInt(dateArray[0]) <= parseInt(dateClosing[1])){
+                  dateVerif = true
+                }
+              }
+            }
+
+          }
+
+
+          if(title.toLowerCase().includes("grant") && dateVerif == true){
+            var indexDescription = infoArray.indexOf(" Project description:")
+            var indexDescription1 = infoArray.indexOf("A.PROGRAM DESCRIPTION")
+            var indexDescription2 = infoArray.indexOf("A. PROGRAM DESCRIPTION")
+            if(indexDescription != -1){
+              var theme = infoArray[indexDescription+1]
+            }else if(indexDescription1 != -1){
+              var theme = infoArray[indexDescription1+1]
+            }else if(indexDescription2 != -1){
+              var theme = infoArray[indexDescription2+1]
+            }else{
+              var theme = "Chercher dans Info Box"
+            }
+
             var metadata = {
               title: title,
               url: "https://sn.usembassy.gov/education-culture/funding-opportunities/",
-              validite: "Chercher dans le Info Box",
-              theme: "Non Défini",
+              validite: "Fin de validité: " + dateClose,
+              theme: theme,
               financement: "US EMBASSY",
               source: "usembassy",
-              info: title2
+              info: infoArray.join(")-----(")
             }
             table.push(metadata);
           }
         });
       }
     });
+
 
 
     request({method: "GET",
