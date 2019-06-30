@@ -76,7 +76,7 @@ saveRouter.route('/')
               var $ = cheerio.load(html);
               $('.actionButton.large').each(function(i, element){
                 var a = $(this);
-                var theme = "Télécharger info: " + a.attr("href")
+                var theme = a.attr("href")
 
                 var metadata = {
                   title: title,
