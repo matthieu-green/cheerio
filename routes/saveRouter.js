@@ -336,28 +336,47 @@ saveRouter.route('/')
           var a = $(this);
 
           var title = a.children('.views-field-title').children('.field-content').text()
-
           var url = a.children('.views-field-title').children('.field-content').children('a').attr('href')
-
           var type = a.children().eq(1).text()
-
           var validite = a.children().eq(2).children('span').text()
-
+          var info = "";
+          var theme = "Non défini"
 
           if(type.toLowerCase().includes("proposals")){
-            var metadata = {
-              title: title,
-              url: "https://www.idrc.ca/en/funding" + url,
-              validite: "Fin de validité: " + validite,
-              theme: "Non Défini",
-              financement: "International Development Research Center",
-              source: "idrc",
+            var urlArray = title.split("’").join("").split(" ")
+            for(i = 0; i<urlArray.length;i++){
+              if(urlArray[i] == "in" || urlArray[i] == "on" || urlArray[i] == "to" || urlArray[i] == "of" || urlArray[i] == "or" || urlArray[i] == "and" || urlArray[i] == "for"){
+                urlArray.splice(i,1)
+              }
             }
+            var uArray = urlArray.join("-")
+            var reqUrl = 'https://www.idrc.ca/en/funding/' + uArray
 
-            table.push(metadata)
+            request({method: "GET",
+                    "rejectUnauthorized": false,
+                    "url": reqUrl}, function (error, response, html) {
+              if (!error && response.statusCode == 200) {
+                var $ = cheerio.load(html);
+                $('.view-display-id-panel_pane_2').each(function(i, element){
+                  var b = $(this);
+                  theme = b.children(".views-row").children().eq(3).text()
+                  info = b.text()
+                  var metadata = {
+                    title: title,
+                    url: reqUrl,
+                    validite: validite,
+                    theme: theme,
+                    financement: "International Development Research Center",
+                    source: "idrc",
+                    info: info.split("\n\n       ").join("============================")
+                  }
+                  table.push(metadata)
+                });
+              }
+            });
           }
-        });
 
+        });
       }else{
         console.log(error)
       }
