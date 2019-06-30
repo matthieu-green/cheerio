@@ -100,36 +100,59 @@ saveRouter.route('/')
 
 
     //request for AECID
-    request('http://www.aecid.es/ES/la-aecid/anuncios/subvenciones', function (error, response, html) {
-      if (!error && response.statusCode == 200) {
-        var $ = cheerio.load(html);
-        $('.listadoanuncios > li').each(function(i, element){
+    async function asyncCall2() {
 
-          var a = $(this);
+      let feed = await parser.parseURL('http://www.aecid.es/_layouts/15/PortalWebAECID/VisorRss.aspx?IdCanal=2&lang=es');
+      feed.items.forEach(item => {
 
-          var title = a.children('p.tituloAnuncios').text()
+        var title = item.title
+        var url = item.link
 
-          var validite = a.children('p.fechaPublicacionAnuncios').text().replace("Fecha de publicación: ", "Date de Publication: ")
+        request(url, function (error, response, html) {
+          if (!error && response.statusCode == 200) {
+            var $ = cheerio.load(html);
+            $('.detalleanuncio').each(function(i, element){
+              var a = $(this);
+              var validite = a.children(".fechalimitepresentaciondetalleanuncio").text().replace("FECHA LÍMITE PRESENTACIÓN - ", "")
+              var theme = a.children(".cuerpodetalleanuncio").text()
+              var valArray = validite.split("/")
+              let current_datetime = new Date()
+              let date = current_datetime.getDate() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getFullYear()
+              var dateArray = date.split("-");
 
-          var verif = parseInt(validite.charAt(30))
+              if(parseInt(dateArray[2]) < parseInt(valArray[2])){
+                insertData()
+              }else if(parseInt(dateArray[2]) == parseInt(valArray[2])){
+                if(parseInt(dateArray[1]) < parseInt(valArray[1])){
+                  insertData()
+                }else if(parseInt(dateArray[1]) == parseInt(valArray[1])){
+                  if (parseInt(dateArray[0]) <= parseInt(valArray[1])){
+                    insertData()
+                  }
+                }
+              }
 
-          var url = a.children('a.vertodas').attr('href')
-
-          if(verif > 8 ){
-            var metadata = {
-              title: title,
-              url: url,
-              validite: validite,
-              theme: "Non Défini",
-              financement: "AECID",
-              source: "aecid"
-            }
-
-            table.push(metadata);
+              function insertData(){
+                var metadata = {
+                  title: title,
+                  url: url,
+                  validite: "Fin de validité: " + validite,
+                  theme: theme,
+                  financement: "AECID",
+                  source: "aecid",
+                }
+                table.push(metadata);
+              }
+            });
+          }else{
+            console.log("error")
           }
         });
-      }
-    });
+
+      });
+    };
+
+    asyncCall2()
 
 
     //request for USAID
