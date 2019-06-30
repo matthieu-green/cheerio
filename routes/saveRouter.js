@@ -459,10 +459,10 @@ saveRouter.route('/')
             title: title,
             url: "https://www.afd.fr/en/calls-for-projects#25475",
             validite: validite,
-            theme: theme,
+            theme: info,
             financement: "AFD",
             source: "afd",
-            info: info
+            info: theme
           }
 
           table.push(metadata);
