@@ -154,7 +154,7 @@ saveRouter.route('/')
             var metadata = {
               title: title,
               url: url,
-              validite: "Fin de Validité: "closeDateString,
+              validite: "Fin de Validité: " + closeDateString,
               theme: info[18],
               financement: "US GRANTS",
               source: "usaid",
