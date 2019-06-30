@@ -417,7 +417,7 @@ saveRouter.route('/')
                 var metadata = {
                   title: title,
                   url: url,
-                  validite: "Non défini",
+                  validite: "Status: Open",
                   theme: theme,
                   financement: "ENABEL",
                   source: "enabel",
