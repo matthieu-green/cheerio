@@ -59,27 +59,44 @@ saveRouter.route('/')
     //request for luxdev
     request('https://senegal.luxdev.lu/fr/tenders', function (error, response, html) {
       if (!error && response.statusCode == 200) {
-        var $ = cheerio.load(html)
+        var $ = cheerio.load(html);
         $('tr.tender:not(.light)[data-country=SEN]').each(function(i, element){
-          var a = $(this)
+          var a = $(this);
 
           var title = a.children('td').children('a').text()
           var url = a.children('td').children('a').attr('href')
           var validite = a.children('td').eq(2).text()
 
-          var metadata = {
-            title: title,
-            url: url,
-            validite: "Fin de Validité: " + validite,
-            theme: "Non Défini",
-            financement: "Multiple Sources",
-            source: "luxdev"
-          }
+          var urlArray = url.split(" ").join("%20").split("•").join("%E2%80%A2")
 
-          table.push(metadata)
-        })
+          request({method: "GET",
+                          "rejectUnauthorized": false,
+                          "url": urlArray}, function (error, response, html) {
+            if (!error && response.statusCode == 200) {
+              var $ = cheerio.load(html);
+              $('.actionButton.large').each(function(i, element){
+                var a = $(this);
+                var theme = "Télécharger info: " + a.attr("href")
+
+                var metadata = {
+                  title: title,
+                  url: urlArray,
+                  validite: "Fin de validité: " + validite,
+                  theme: theme,
+                  financement: "LUXDEV",
+                  source: "luxdev"
+                }
+
+                table.push(metadata);
+              });
+            }else{
+              console.log("problem")
+            }
+          });
+        });
+
       }
-    })
+    });
 
 
     //request for AECID
