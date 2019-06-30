@@ -123,16 +123,45 @@ saveRouter.route('/')
         if(item['content:encoded'].toLowerCase().includes("senegal")){
           var title = item.title
           var url = item.link
-          var validite = "Date de publication: " + item.pubDate
-          var metadata = {
-            title: title,
-            url: url,
-            validite: "Fin de validité" + validite,
-            theme: "Non Défini",
-            financement: "US GRANTS",
-            source: "usaid"
+          var info = item['content:encoded'].split("</td></tr><tr><td>").join(";").split("</td></tr><tr><td valign=\'top\'>").join(";").split("</td><td>").join(" ").split(";").slice(2)
+
+          var closeDateString = info[12].split(" ").slice(2).join(" ").split(",").join("")
+          var closeDateArray = closeDateString.split(" ")
+
+          let current_datetime = new Date()
+          let date = current_datetime.getDate() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getFullYear()
+          var dateArray = date.split("-");
+
+          var current_date = dateArray[0]+ " " + dateArray[1]+ " " + dateArray[2]
+
+          var months = [" ", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+          var month = months.indexOf(closeDateArray[0])
+
+          if(parseInt(dateArray[2]) < parseInt(closeDateArray[2])){
+            insertData()
+          }else if(parseInt(dateArray[2]) == parseInt(closeDateArray[2])){
+            if(parseInt(dateArray[1]) < parseInt(month)){
+              insertData()
+            }else if(parseInt(dateArray[1]) == parseInt(month)){
+              if (parseInt(dateArray[0]) <= parseInt(closeDateArray[1])){
+                insertData()
+              }
+            }
           }
-          table.push(metadata);
+
+          function insertData(){
+            var metadata = {
+              title: title,
+              url: url,
+              validite: closeDateString,
+              theme: info[18],
+              financement: "US GRANTS",
+              source: "usaid",
+              info: info
+            }
+            table.push(metadata);
+          }
         }
       });
       return res.status(200).json(table)
@@ -140,6 +169,8 @@ saveRouter.route('/')
 
     asyncCall()
 
+
+    //FUNDS FOR NGOS
     request('https://www2.fundsforngos.org/tag/senegal/', function (error, response, html) {
       if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html);
@@ -202,6 +233,7 @@ saveRouter.route('/')
       }
     });
 
+    //US EMBASSY
     request('https://sn.usembassy.gov/education-culture/funding-opportunities/', function (error, response, html) {
       if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html);
