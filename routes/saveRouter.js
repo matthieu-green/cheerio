@@ -436,6 +436,43 @@ saveRouter.route('/')
 
     asyncCall1()
 
+    //AFD
+    request('https://www.afd.fr/en/calls-for-projects', function (error, response, html) {
+      if (!error && response.statusCode == 200) {
+        var $ = cheerio.load(html);
+        $('#25475 > .anchor > .content > div > div > div > div > div').each(function(i, element){
+
+          var a = $(this);
+
+          var title = a.children(".block").children(".__name").children(".__name").text()
+
+          var description = a.children(".block").children(".__descriptive-nm").children(".__descriptive-nm").children("table").children('tbody')
+
+
+          var theme = description.children().eq(1).text().replace('\n', '').replace('\t', '') + " " + description.children().eq(2).text().replace('\n', '').replace('\t', '')
+          var validite = description.children().eq(0).children().eq(1).text()
+
+          var info = a.children(".block").children(".__descriptive-nm").children(".__links-mv").children('div').children('div').children('div').children('a').attr('href')
+
+
+          var metadata = {
+            title: title,
+            url: "https://www.afd.fr/en/calls-for-projects#25475",
+            validite: validite,
+            theme: theme,
+            financement: "AFD",
+            source: "afd",
+            info: info
+          }
+
+          table.push(metadata);
+        });
+      }else{
+        console.log(error)
+      }
+    });
+
+
 
 
 
